@@ -83,7 +83,10 @@
       <div class="piece p-hi" style="left:37.988%;top:16.690%;width:48.242%"><img src="p-hi.jpg" width="988" height="435" alt="Hi! I'm Eric and I make things on the web and get people noticed online."></div>
 
       <div class="piece p-heading" id="contact" style="left:7.275%;top:44.460%;width:50.146%"><img src="p-heading.jpg" width="1027" height="163" alt=""><h2 class="sr-only">Let's work together</h2></div>
+      <!-- FORMSPREE: replace "#" with https://formspree.io/f/YOUR_FORM_ID to receive messages by email. -->
       <form name="contact" action="#" method="post" data-thanks>
+        <input type="hidden" name="_subject" value="New message from ericmillington.com">
+        <div class="sr-only" aria-hidden="true"><label for="f-gotcha">Leave this empty</label><input id="f-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
         <div class="piece p-form" style="left:8.838%;top:52.947%;width:48.193%"><img src="p-form.jpg" width="987" height="626" alt="">
           <div class="hot" style="left:32.83%;top:4.31%;width:57.24%;height:11.98%"><label class="sr-only" for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
           <div class="hot" style="left:34.35%;top:27.48%;width:56.74%;height:11.98%"><label class="sr-only" for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
@@ -108,15 +111,33 @@
   </div>
 
   <script>
-    /* Demo submit: with action="#", show a thank-you line under the form.
-       Point action at a real endpoint (Formspree, Basin, etc.) to receive messages. */
-    document.querySelector("form[data-thanks]").addEventListener("submit", function (e) {
-      var action = this.getAttribute("action");
-      if (action && action !== "#") return;
-      e.preventDefault();
-      this.querySelector(".thanks").textContent = "Thanks! Talk soon.";
-      this.reset();
-    });
+    /* Contact form. With action="#" it's a demo: it just shows the thank-you line.
+       With a Formspree URL it sends the message in the background, so the visitor stays on the page. */
+    (function () {
+      var form = document.querySelector("form[data-thanks]");
+      var status = form.querySelector(".thanks");
+      var button = form.querySelector('button[type="submit"]');
+      var say = function (text, isError) { status.textContent = text; status.style.color = isError ? "#ff9b8a" : ""; };
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var action = form.getAttribute("action");
+        if (!action || action === "#") { say("Thanks! Talk soon."); form.reset(); return; }
+
+        button.disabled = true;
+        say("Sending…");
+        fetch(action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
+          .then(function (res) {
+            if (!res.ok) throw new Error(res.status);
+            say("Thanks! Talk soon.");
+            form.reset();
+          })
+          .catch(function () {
+            say("That didn't send. Please try again in a minute.", true);
+          })
+          .then(function () { button.disabled = false; });
+      });
+    })();
   </script>
 </body>
 </html>
