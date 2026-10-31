@@ -69,9 +69,24 @@
       .hot input { font-size: 16px; }          /* 16px stops iOS zooming in on focus */
       .thanks { font-size: 15px; }
     }
+
+    /* Boiling lines: the pen strokes shimmer like hand-drawn animation frames
+       (on hover over a drawn link, and on the section you land on after clicking one) */
+    html { scroll-behavior: smooth; }
+    @keyframes boil { 0% { filter: url(#boil-1) } 33% { filter: url(#boil-2) } 66% { filter: url(#boil-3) } }
+    .piece:has(> a.hot:hover) > img, .is-boiling > img { animation: boil .36s steps(1) infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .piece > img { animation: none !important; }
+    }
   </style>
 </head>
 <body id="top">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="boil-1"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+    <filter id="boil-2"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+    <filter id="boil-3"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="13"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+  </svg>
   <div class="sheet">
     <header>
       <div class="piece p-logo" style="left:3.906%;top:0.849%;width:26.367%"><img src="p-logo.jpg" width="540" height="209" alt=""><a class="hot" href="#top" style="left:0;top:0;width:100%;height:100%"><h1 class="sr-only">Eric Millington website</h1><span class="sr-only">Home</span></a></div>
@@ -136,6 +151,34 @@
             say("That didn't send. Please try again in a minute.", true);
           })
           .then(function () { button.disabled = false; });
+      });
+    })();
+  </script>
+  <script>
+    /* Boil the section you land on after clicking a drawn link (Contact me, your name, Home, Contact). */
+    (function () {
+      var groups = { "#contact": [".p-heading", ".p-form"], "#top": [".p-logo", ".p-face", ".p-hi"] };
+      var timer;
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        var pieces = a && groups[a.getAttribute("href")];
+        if (!pieces) return;
+        clearTimeout(timer);
+        var boil = function () {
+          pieces.forEach(function (sel) { var el = document.querySelector(sel); if (el) el.classList.add("is-boiling"); });
+          setTimeout(function () { document.querySelectorAll(".is-boiling").forEach(function (el) { el.classList.remove("is-boiling"); }); }, 1100);
+        };
+        /* wait for the smooth scroll to finish (scrollend where supported, else a short delay) */
+        if ("onscrollend" in window) {
+          var startY = scrollY;
+          var done = function () { removeEventListener("scrollend", done); clearTimeout(timer); boil(); };
+          addEventListener("scrollend", done);
+          timer = setTimeout(function () {  /* already in place: nothing scrolled, so boil right away */
+            if (scrollY === startY) done(); else timer = setTimeout(done, 1500);
+          }, 150);
+        } else {
+          timer = setTimeout(boil, 600);
+        }
       });
     })();
   </script>
