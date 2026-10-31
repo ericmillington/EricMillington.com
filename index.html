@@ -79,69 +79,6 @@
       html { scroll-behavior: auto; }
       .piece > img { animation: none !important; }
     }
-
-    /* ===== Doodles: the notepad comes to life =====
-       Each doodle boils like a living sketch and has its own little behaviour.
-       Desktop: placed around the drawing (some live in the page margins / peek in from the screen edge).
-       Phones: they join the stacked layout, in DOM order. Click one for a surprise. */
-    html, body { overflow-x: clip; }
-    .doodle { position: absolute; z-index: 1; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .doodle > img, .d-chomper img { display: block; width: 100%; height: auto; mix-blend-mode: lighten; animation: boil .5s steps(1) infinite; }
-    .doodle:hover > img, .d-chomper:hover img { animation: boil .2s steps(1) infinite, jiggle .18s ease-in-out infinite alternate; }
-    @keyframes jiggle { from { transform: rotate(-2deg) } to { transform: rotate(2deg) } }
-
-    .d-spiral { animation: spin 26s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg) } }
-    .d-log { transform-origin: 50% 90%; animation: rock 3.2s ease-in-out infinite alternate; }
-    @keyframes rock { from { transform: rotate(-7deg) } to { transform: rotate(6deg) } }
-    .d-hatch { animation: drift 7s ease-in-out infinite alternate; }
-    @keyframes drift { from { transform: translate(-3%, 3%) rotate(-2deg) } to { transform: translate(3%, -4%) rotate(2.5deg) } }
-    .d-stump { transform-origin: 50% 100%; animation: hop 5.5s ease-in-out infinite; }
-    @keyframes hop { 0%, 78% { transform: none } 83% { transform: scale(1.06, .86) } 89% { transform: translateY(-16%) scale(.95, 1.08) } 95% { transform: scale(1.05, .9) } 100% { transform: none } }
-    .d-worm { transform-origin: 100% 60%; animation: inch 2.4s ease-in-out infinite alternate; }
-    @keyframes inch { from { transform: scaleX(1) } to { transform: translateX(-4%) scaleX(.9) scaleY(1.05) } }
-    .d-worm-top { transform-origin: 100% 0; animation: sway 4.5s ease-in-out infinite alternate; }
-    @keyframes sway { from { transform: rotate(-5deg) } to { transform: rotate(4deg) } }
-    .d-rings { transform-origin: 100% 50%; animation: breathe 3s ease-in-out infinite alternate; }
-    @keyframes breathe { to { transform: scale(1.07) } }
-
-    /* Long-face fellow: leans in, and his jaw chomps (fast while you type in the form) */
-    .d-chomper { transform-origin: 0 100%; animation: lean 5s ease-in-out infinite alternate; }
-    @keyframes lean { from { transform: rotate(-4deg) } to { transform: rotate(3deg) } }
-    .d-chomper .head { width: 86.27%; }
-    .d-chomper .mouth { position: absolute; left: 55.15%; top: 76.16%; width: 44.85%; animation: boil .5s steps(1) infinite, chomp 3.4s ease-in-out infinite; }
-    @keyframes chomp { 0%, 70%, 100% { translate: 0 0 } 75% { translate: -4% -16% } 80% { translate: 0 0 } 85% { translate: -4% -16% } 90% { translate: 0 0 } }
-    .d-chomper.talking .mouth, .d-chomper.poke .mouth { animation: boil .2s steps(1) infinite, chomp-fast .16s ease-in-out infinite alternate; }
-    @keyframes chomp-fast { to { translate: -4% -16% } }
-
-    /* Click surprises */
-    .d-spiral.poke > img { animation: boil .2s steps(1) infinite, whirl .9s cubic-bezier(.2,.7,.2,1); }
-    @keyframes whirl { to { transform: rotate(-720deg) } }
-    .d-log.poke > img { animation: boil .2s steps(1) infinite, roll 1s cubic-bezier(.3,.7,.3,1); }
-    @keyframes roll { 50% { transform: translateX(-25%) rotate(-200deg) } 100% { transform: rotate(-360deg) } }
-    .d-stump.poke > img { transform-origin: 50% 100%; animation: boil .2s steps(1) infinite, bighop .8s cubic-bezier(.3,.7,.4,1); }
-    @keyframes bighop { 20% { transform: scale(1.12, .8) } 50% { transform: translateY(-45%) scale(.92, 1.12) rotate(8deg) } 80% { transform: scale(1.1, .85) } }
-    .d-hatch.poke > img, .d-worm.poke > img, .d-worm-top.poke > img, .d-rings.poke > img { animation: boil .15s steps(1) infinite, shake .12s linear 6 alternate; }
-    @keyframes shake { from { transform: translate(-3%, 1%) rotate(-3deg) } to { transform: translate(3%, -1%) rotate(3deg) } }
-
-    /* Margin doodles need room beside the drawing */
-    @media (min-width: 721px) and (max-width: 1179px) { .d-margin { display: none; } }
-
-    @media (max-width: 720px) {
-      .doodle { position: relative; left: auto !important; top: auto !important; right: auto !important; }
-      .d-desk { display: none; }
-      .d-log { width: 25% !important; }
-      .p-face { width: 46% !important; margin: 12px 0 0 !important; }
-      .d-spiral { width: 21% !important; }
-      .d-worm { width: 50% !important; margin: -10px -16px -10px auto; }
-      .d-hatch { width: 56% !important; margin: 0 auto; }
-      .p-website { width: 62% !important; margin: 8px 0 0 !important; }
-      .d-chomper { width: 31% !important; }
-      .d-stump { width: 34% !important; margin: 0 auto -76px 4%; z-index: 0; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .doodle, .doodle img { animation: none !important; translate: none !important; }
-    }
   </style>
 </head>
 <body id="top">
@@ -157,12 +94,9 @@
     </header>
 
     <main>
-      <div class="doodle d-log" aria-hidden="true" style="left:87.402%;top:26.403%;width:11.230%"><img src="doodles/log.png" width="280" height="292" alt=""></div>
       <div class="piece p-face" style="left:9.180%;top:13.107%;width:25.928%"><img src="p-face.jpg" width="531" height="614" alt="Hand-drawn portrait of Eric in a baseball cap, with a beard and a smile"></div>
-      <div class="doodle d-spiral" aria-hidden="true" style="left:87.891%;top:14.144%;width:9.277%"><img src="doodles/spiral.png" width="211" height="199" alt=""></div>
       <div class="piece p-hi" style="left:37.988%;top:16.690%;width:48.242%"><img src="p-hi.jpg" width="988" height="435" alt="Hi! I'm Eric and I make things on the web and get people noticed online."></div>
 
-      <div class="doodle d-worm d-margin" aria-hidden="true" style="right:calc((100% - 100vw) / 2);top:46.676%;width:19.531%"><img src="doodles/worm.png" width="365" height="307" alt=""></div>
       <div class="piece p-heading" id="contact" style="left:7.275%;top:44.460%;width:50.146%"><img src="p-heading.jpg" width="1027" height="163" alt=""><h2 class="sr-only">Let's work together</h2></div>
       <!-- Messages go to Formspree, which emails them to Eric. Set action back to "#" for demo mode. -->
       <form name="contact" action="https://formspree.io/f/xbggzdpo" method="post" data-thanks>
@@ -176,13 +110,10 @@
           <p class="hot thanks" role="status" style="left:0;top:100%;width:100%;height:auto;padding-top:1.5%"></p>
         </div>
       </form>
-      <div class="doodle d-hatch" aria-hidden="true" style="left:37.109%;top:0.849%;width:21.484%"><img src="doodles/hatch.png" width="620" height="346" alt=""></div>
       <div class="piece p-website" style="left:61.182%;top:42.150%;width:32.568%"><img src="p-website.jpg" width="667" height="749" alt="A hand-drawn sketch of a website layout, labeled: Website!"></div>
-      <div class="doodle d-chomper d-margin" aria-hidden="true" style="left:-12.207%;top:48.091%;width:14.648%"><img class="head" src="doodles/head.png" width="352" height="559" alt=""><img class="mouth" src="doodles/mouth.png" width="183" height="169" alt=""></div>
     </main>
 
     <footer>
-      <div class="doodle d-stump" aria-hidden="true" style="left:11.230%;top:76.473%;width:11.475%"><img src="doodles/stump.png" width="285" height="274" alt=""></div>
       <div class="piece p-line" style="left:8.789%;top:84.913%;width:86.377%"><img src="p-line.jpg" width="1769" height="96" alt=""></div>
       <div class="piece p-ftext" style="left:32.520%;top:87.364%;width:34.814%"><img src="p-ftext.jpg" width="713" height="88" alt="This is a footer"></div>
       <nav aria-label="Footer">
@@ -191,8 +122,6 @@
           <a class="hot" href="#contact" style="left:0.34%;top:59.43%;width:96.55%;height:40.00%">Contact</a>
         </div>
       </nav>
-      <div class="doodle d-worm-top d-margin d-desk" aria-hidden="true" style="right:calc((100% - 100vw) / 2);top:0.000%;width:14.648%"><img src="doodles/worm-top.png" width="272" height="380" alt=""></div>
-      <div class="doodle d-rings d-margin d-desk" aria-hidden="true" style="right:calc((100% - 100vw) / 2);top:72.136%;width:7.812%"><img src="doodles/rings-edge.png" width="137" height="260" alt=""></div>
     </footer>
   </div>
 
@@ -250,25 +179,6 @@
         } else {
           timer = setTimeout(boil, 600);
         }
-      });
-    })();
-  </script>
-  <script>
-    /* Doodle surprises: click a doodle to poke it; typing in the form makes the long-face fellow chomp. */
-    (function () {
-      document.querySelectorAll(".doodle").forEach(function (d) {
-        d.addEventListener("click", function () {
-          d.classList.remove("poke"); void d.offsetWidth; d.classList.add("poke");
-          clearTimeout(d._t); d._t = setTimeout(function () { d.classList.remove("poke"); }, 1100);
-        });
-      });
-      var chomper = document.querySelector(".d-chomper"), quiet;
-      document.querySelectorAll("form[data-thanks] input").forEach(function (input) {
-        input.addEventListener("input", function () {
-          if (!chomper) return;
-          chomper.classList.add("talking");
-          clearTimeout(quiet); quiet = setTimeout(function () { chomper.classList.remove("talking"); }, 450);
-        });
       });
     })();
   </script>
