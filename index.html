@@ -79,6 +79,12 @@
       html { scroll-behavior: auto; }
       .piece > img { animation: none !important; }
     }
+
+    /* Line boil on the drawn buttons, all the time (a bit faster when pointed at) */
+    .p-contact > img, .p-go { animation: boil .45s steps(1) infinite; }
+    .p-go { position: absolute; display: block; height: auto; mix-blend-mode: lighten; pointer-events: none; }
+    .piece:has(> a.hot:hover) > img, .p-form:has(button.hot:hover) .p-go { animation-duration: .2s; }
+    @media (prefers-reduced-motion: reduce) { .p-go { animation: none !important; } }
   </style>
 </head>
 <body id="top">
@@ -106,6 +112,7 @@
           <div class="hot" style="left:32.83%;top:4.31%;width:57.24%;height:11.98%"><label class="sr-only" for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
           <div class="hot" style="left:34.35%;top:27.48%;width:56.74%;height:11.98%"><label class="sr-only" for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
           <div class="hot" style="left:35.87%;top:52.24%;width:55.22%;height:12.78%"><label class="sr-only" for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+          <img class="p-go" src="p-go.jpg" width="445" height="180" alt="" style="left:56.13%;top:73.802%;width:45.086%">
           <button class="hot" type="submit" style="left:61.20%;top:80.19%;width:34.45%;height:14.38%">Go!</button>
           <p class="hot thanks" role="status" style="left:0;top:100%;width:100%;height:auto;padding-top:1.5%"></p>
         </div>
